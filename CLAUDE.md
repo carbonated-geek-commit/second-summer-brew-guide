@@ -7,8 +7,9 @@
 
 ## Mission
 
-Ship a single-file static brew guide — "Second Summer": two brews, five beers — to GitHub Pages
-under my account, then maintain it from this spec in future sessions.
+Ship a single-file static brew guide — "Second Summer" — to GitHub Pages under my account, then
+maintain it from this spec in future sessions. Originally two brews / five beers; expanded
+2026-07-27 at owner request to five brews / eight beers (Brews 3–5 below).
 
 ## Blocking decisions — ask me before starting
 
@@ -165,24 +166,120 @@ Brews video above. These enrich the page; they do not change the recipe numbers.
 
 ---
 
+## Brews 3–5 (added 2026-07-27 at owner request)
+
+Constants for these three only: **5.25 gal into fermenter → ~5.0 gal packaged** (≈0.25 gal
+trub/racking loss). Grain bills scaled proportionally from the BYO source recipes (preserves each
+source's implied efficiency); per owner direction each OG is raised toward the top of its style
+range ("to style, ABV high"). Checkpoints remain two matching gravity readings two days apart.
+Brews 3–5 have no dated calendar — relative timelines only. Pre-boil gravities below are derived
+arithmetically from target OG × volume. Keg pressures and Brew 5's priming rate are our defaults
+(sources silent); everything else traces to the source.
+
+### Brew 3 — Venkman's Vit (wit × schwarzbier hybrid)
+
+Source: https://byo.com/recipes/venkman-s-vit/ (Chris Colby). Original 5 gal: OG 1.052 · FG 1.013
+· 20 IBU · SRM 15 · 5.1%. Scale ×1.13.
+
+**Targets: OG 1.056 (±.003) · FG ~1.014 · 5.5% ABV · 20 IBU · SRM ~16**
+
+| Amount | Item | Role |
+|---|---|---|
+| 7 lb 2 oz (3.23 kg) | Pilsner malt | base |
+| 4 lb 12 oz (2.15 kg) | Wheat malt | wit half |
+| 3 oz (85 g) | Dehusked black patent | the schwarz half — color, no roast bite |
+
+**Mash/volumes:** dough in with 18 qt (4.5 gal) liquor → mash **152°F / 60 min** → collect
+5.8 gal + add 1 gal top-up water (pre-boil 6.8 gal, ~1.043) → **boil 90 min, vigorous**.
+
+**Hops:** 0.85 oz (24 g) Santiam ~6% AA @ 60 (≈5.1 AAU) · 0.6 oz (17 g) Sterling @ 10.
+
+**Yeast & fermentation:** Wyeast 3463 (Forbidden Fruit). Pitch/ferment at 70°F; free rise to
+76°F when fermentation slows. FG gate ~1.014. **Post-FG only:** zest of ½ Oro Blanco grapefruit
+(zero pith) in secondary, 3–4 d contact; confirm gravity unchanged before packaging.
+
+**Packaging:** 2.7–3.0 volumes. 7 oz (200 g) cane sugar → ~3.0 vol — **heavy glass only**
+(German wheat-beer bottles); standard longnecks are not rated for 3.0: use 5.5 oz (156 g) →
+~2.7 vol. Keg: 12 psi @ 38°F. Condition 2 wk @ 70°F; pour young — wit character fades fast.
+
+### Brew 4 — Black Radish clone (schwarzbier, Weeping Radish Farm Brewery)
+
+Source: https://byo.com/recipes/weeping-radish-farm-brewery-black-radish-clone/ (Marc Martin).
+Original 5 gal: OG 1.048 · FG 1.012 · 26 IBU · SRM 23 · 4.7%. Scale ×1.14 (style OG ceiling).
+
+**Targets: OG 1.052 (±.003) · FG ~1.013 · 5.1% ABV · 26 IBU · SRM 23**
+
+| Amount | Item | Role |
+|---|---|---|
+| 8.5 lb (3.86 kg) | 2-row pale malt | base |
+| 2.25 lb (1.02 kg) | Munich malt | melanoidin depth |
+| 11.5 oz (326 g) | Chocolate malt (375°L) | roast, color |
+
+**Mash/volumes:** strike 4 gal @ 172°F → mash **154°F / 60 min** → sparge slowly @ 175°F →
+collect 6.3 gal (pre-boil ~1.043) → boil 60 min.
+
+**Hops:** 1.15 oz (33 g) Mt. Hood ~6.5% AA @ 60 (≈7.5 AAU) · 0.6 oz (17 g) Mt. Hood @ 20
+(≈3.9 AAU) · ½ tsp Irish moss @ 15.
+
+**Yeast & fermentation:** WLP830 (German Lager) / Wyeast 2308 (Munich Lager) — 2 packs, or 1 +
+a 1.5–2 L starter. Pitch ≤75°F and aerate heavily; let settle to 65°F over a few hours; at first
+signs of fermentation drop to **52°F** and hold to FG (~1.013). Condition 2 wk @ 42°F.
+
+**Packaging:** ¾ cup (150 g) dextrose → ~2.4 vol (longneck-safe), or keg 10–12 psi @ 38°F.
+Carbonate & age 2–4 wk.
+
+### Brew 5 — Dave Helt's Schwarzbier (ale-fermented, BOS)
+
+Source: https://byo.com/recipes/dave-helt-s-schwarzbier/ (Gordon Strong). Best of Show, Drunk
+Monk Challenge (735 entries). Original 5 gal: OG 1.050 · FG 1.019 · 30 IBU · SRM 32 · 4.1%.
+Scale ×1.13 — lifts ABV into the 4.4–5.4% style band while keeping the winner's full body.
+
+**Targets: OG 1.054 (±.003) · FG ~1.020 · ~4.5% ABV · 30 IBU · SRM ~32**
+
+| Amount | Item |
+|---|---|
+| 5.1 lb (2.31 kg) | Maris Otter malt |
+| 2.25 lb (1.02 kg) | Vienna malt |
+| 1.7 lb (0.77 kg) | Munich malt |
+| 1.1 lb (0.5 kg) | Flaked barley |
+| 1.1 lb (0.5 kg) | Dehusked Carafa II |
+| 0.6 lb (272 g) | CaraPils |
+| 0.6 lb (272 g) | Pale chocolate malt |
+
+**Mash/volumes:** dough in with ~19 qt (4.75 gal) → mash **154°F / 60 min** → collect 6.8 gal
+(pre-boil ~1.042) → **boil 90 min**. Option (ours): mash 150°F → FG ~1.016, ~5.0% ABV, drier.
+
+**Hops:** 2.0 oz (57 g) US Goldings ~4.5% AA @ 30 (9 AAU; source ran 8, the original 11).
+
+**Yeast & fermentation:** Wyeast 1056 (American Ale) — 2 packs, or ⅔ cup slurry from a previous
+batch. Ferment 66–68°F. FG gate ~1.020 — a full finish is this winner's character.
+
+**Packaging:** 4.5 oz (128 g) corn sugar → ~2.5 vol (our default; source specifies none), or keg
+10–12 psi @ 38°F. Then **lager @ 38°F for 4 months** before judging it.
+
+---
+
 ## Site Spec (Mode B only)
 
 - **One file**, `index.html`, HTML + CSS + JS inline. Only external resource: Google Fonts —
   Bricolage Grotesque (500/700/800, display), Instrument Sans (400/500/600, body), Spline Sans
   Mono (400/500/600, all measurements and gravity figures).
-- **State machine:** `<html data-brew="red|blonde" data-path="classic|grapefruit|cherry|blackberry">`.
-  Visibility is CSS-driven: `html[data-brew="blonde"] .red-only { display:none !important }` and the
-  mirror rule for `.blonde-only`. Fork panels key off `data-path`. JS only toggles attributes and
-  button states.
+- **State machine:** `<html data-brew="red|blonde|vit|radish|schwarz" data-path="classic|grapefruit|cherry|blackberry">`.
+  Visibility is CSS-driven via `html:not([data-brew="X"]) .X-only { display:none !important }` for
+  each brew value. Fork panels key off `data-path` (red only; path buttons also force
+  `data-brew="red"`). JS only toggles attributes and button states.
 - **Tokens:** bg `#1C1113` · panel `#26161A` · text `#F3E9DB` · secondary `#C98E52` · hairline
   `rgba(243,233,219,.14)`. Accents — classic `#CB4F3C`, grapefruit `#EF6A5A`, cherry `#C63A55`,
-  blackberry `#9A6BB4`, blonde `#D9A63C`. The accent and the CSS pint-glass gradient
-  (`--beer-top` / `--beer-bottom`) both shift with state.
+  blackberry `#9A6BB4`, blonde `#D9A63C`, vit `#F0A85E`, radish `#6FA3A8`, schwarz `#8E9BB5`.
+  The accent and the CSS pint-glass gradient (`--beer-top` / `--beer-bottom`) both shift with
+  state.
 - **Structure, top to bottom:** sticky topbar (brew switcher; fruit chips are `.red-only`) → hero
   (CSS pint glass + six-cell vitals grid per brew) → style profile (`.blonde-only`, from the
   Style & technique notes above) → fork ratings cards with pick buttons (red) →
   shopping lists → brew-day checklist → fermentation checklist → fork panels (red) → packaging +
-  calendar → mono quick-reference block per brew.
+  calendar → mono quick-reference block per brew. Brews 3–5 follow the same per-brew groups
+  (vitals → shopping → brew day → fermentation → packaging + relative timeline → quick reference);
+  they have no fruit forks, and the vit's zest steps render only after its FG gate.
 - **Steps** are list items with large custom checkboxes (DOM state only — resets on reload, by
   design), duration badges, and amber "checkpoint" styling on the OG/FG gates.
 - **Mobile-first:** single column, 720 px max width, clean at 380 px, respects
@@ -191,7 +288,7 @@ Brews video above. These enrich the page; they do not change the recipe numbers.
 ## Acceptance checklist
 
 - [ ] HTML parses with balanced tags and globally unique `id`s.
-- [ ] Brew switcher toggles Red ⇄ Blonde; all four fruit paths render and recolor accent + glass.
+- [ ] Brew switcher toggles all five brews; all four fruit paths render and recolor accent + glass.
 - [ ] Every number on the page matches Canonical Recipe Data (spot-check OG/FG/IBU, grain weights,
       priming amounts for both brews).
 - [ ] Safety copy present: page contains both "not rated" and "3.2" in the blonde packaging section.

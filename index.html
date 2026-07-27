@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Second Summer — Two Brews, Five Beers</title>
+<title>Second Summer — Five Brews, Eight Beers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,9 +23,15 @@
   html[data-path="cherry"]{ --accent:#C63A55; --beer-top:#C4514E; --beer-bottom:#5C1B27; }
   html[data-path="blackberry"]{ --accent:#9A6BB4; --beer-top:#8D5673; --beer-bottom:#37203F; }
   html[data-brew="blonde"]{ --accent:#D9A63C; --beer-top:#F0C75E; --beer-bottom:#B87C20; }
+  html[data-brew="vit"]{ --accent:#F0A85E; --beer-top:#D89A55; --beer-bottom:#8F5A28; }
+  html[data-brew="radish"]{ --accent:#6FA3A8; --beer-top:#4A342A; --beer-bottom:#17100C; }
+  html[data-brew="schwarz"]{ --accent:#8E9BB5; --beer-top:#3C2A24; --beer-bottom:#100C0A; }
 
-  html[data-brew="blonde"] .red-only{ display:none !important; }
-  html[data-brew="red"] .blonde-only{ display:none !important; }
+  html:not([data-brew="red"]) .red-only{ display:none !important; }
+  html:not([data-brew="blonde"]) .blonde-only{ display:none !important; }
+  html:not([data-brew="vit"]) .vit-only{ display:none !important; }
+  html:not([data-brew="radish"]) .radish-only{ display:none !important; }
+  html:not([data-brew="schwarz"]) .schwarz-only{ display:none !important; }
 
   *{ margin:0; padding:0; box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
@@ -67,15 +73,19 @@
     margin-right:auto; white-space:nowrap;
   }
   .brand span{ color:var(--accent); transition:color .25s; }
-  .switcher{ display:flex; gap:0; border:1px solid var(--hairline); border-radius:999px; overflow:hidden; }
+  .switcher{ display:flex; flex-wrap:wrap; gap:6px; }
   .switcher button{
-    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:.8rem;
-    background:none; border:none; color:var(--text); padding:7px 14px; cursor:pointer;
-    transition:background .2s, color .2s;
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:.78rem;
+    background:none; border:1px solid var(--hairline); border-radius:999px;
+    color:var(--text); padding:6px 12px; cursor:pointer;
+    transition:background .2s, border-color .2s, color .2s;
   }
   html[data-brew="red"] .switcher button[data-brew-btn="red"],
-  html[data-brew="blonde"] .switcher button[data-brew-btn="blonde"]{
-    background:var(--accent); color:#1C1113;
+  html[data-brew="blonde"] .switcher button[data-brew-btn="blonde"],
+  html[data-brew="vit"] .switcher button[data-brew-btn="vit"],
+  html[data-brew="radish"] .switcher button[data-brew-btn="radish"],
+  html[data-brew="schwarz"] .switcher button[data-brew-btn="schwarz"]{
+    background:var(--accent); border-color:var(--accent); color:#1C1113;
   }
   .chips{ display:flex; gap:6px; flex-wrap:wrap; width:100%; }
   .chip{
@@ -255,7 +265,10 @@
     <div class="brand">Second <span>Summer</span></div>
     <nav class="switcher" aria-label="Brew switcher">
       <button type="button" data-brew-btn="red" aria-pressed="true">Red IPA</button>
-      <button type="button" data-brew-btn="blonde" aria-pressed="false">Belgian Blonde</button>
+      <button type="button" data-brew-btn="blonde" aria-pressed="false">Blonde</button>
+      <button type="button" data-brew-btn="vit" aria-pressed="false">Vit</button>
+      <button type="button" data-brew-btn="radish" aria-pressed="false">Black Radish</button>
+      <button type="button" data-brew-btn="schwarz" aria-pressed="false">Schwarzbier</button>
     </nav>
     <div class="chips red-only" role="group" aria-label="Fruit path">
       <button type="button" class="chip" data-path-btn="classic" aria-pressed="true">Classic</button>
@@ -276,11 +289,17 @@
     <div class="glass-shine"></div>
   </div>
   <div class="hero-copy">
-    <p class="kicker">Two brews · Five beers</p>
+    <p class="kicker">Five brews · Eight beers</p>
     <h1 class="red-only">Red IPA</h1>
     <h1 class="blonde-only">Belgian Blonde</h1>
+    <h1 class="vit-only">Venkman's Vit</h1>
+    <h1 class="radish-only">Black Radish</h1>
+    <h1 class="schwarz-only">Schwarzbier</h1>
     <p class="red-only">One 4.75-gal base batch, four ways: classic, grapefruit, cherry, blackberry.</p>
     <p class="blonde-only">BJCP 25A — scaled from Mean Brews' composite of 25 award-winning recipes.</p>
+    <p class="vit-only">A wit crossed with a schwarzbier — Sterling hops, Oro Blanco zest. Crossing the streams, on purpose.</p>
+    <p class="radish-only">Weeping Radish Farm Brewery clone — clean lager feel, mild bitterness, complementary roast.</p>
+    <p class="schwarz-only">Dave Helt's Best-of-Show winner — ale-fermented, lagered four patient months.</p>
   </div>
 </section>
 
@@ -300,6 +319,33 @@
   <div class="vital"><div class="label">IBU</div><div class="value">26</div></div>
   <div class="vital"><div class="label">SRM</div><div class="value">~5</div></div>
   <div class="vital"><div class="label">Batch</div><div class="value">4.75 gal</div></div>
+</div>
+
+<div class="vitals vit-only" id="vitals-vit">
+  <div class="vital"><div class="label">OG</div><div class="value">1.056 ±.003</div></div>
+  <div class="vital"><div class="label">FG</div><div class="value">~1.014</div></div>
+  <div class="vital"><div class="label">ABV</div><div class="value">5.5%</div></div>
+  <div class="vital"><div class="label">IBU</div><div class="value">20</div></div>
+  <div class="vital"><div class="label">SRM</div><div class="value">~16</div></div>
+  <div class="vital"><div class="label">Packaged</div><div class="value">5.0 gal</div></div>
+</div>
+
+<div class="vitals radish-only" id="vitals-radish">
+  <div class="vital"><div class="label">OG</div><div class="value">1.052 ±.003</div></div>
+  <div class="vital"><div class="label">FG</div><div class="value">~1.013</div></div>
+  <div class="vital"><div class="label">ABV</div><div class="value">5.1%</div></div>
+  <div class="vital"><div class="label">IBU</div><div class="value">26</div></div>
+  <div class="vital"><div class="label">SRM</div><div class="value">23</div></div>
+  <div class="vital"><div class="label">Packaged</div><div class="value">5.0 gal</div></div>
+</div>
+
+<div class="vitals schwarz-only" id="vitals-schwarz">
+  <div class="vital"><div class="label">OG</div><div class="value">1.054 ±.003</div></div>
+  <div class="vital"><div class="label">FG</div><div class="value">~1.020</div></div>
+  <div class="vital"><div class="label">ABV</div><div class="value">~4.5%</div></div>
+  <div class="vital"><div class="label">IBU</div><div class="value">30</div></div>
+  <div class="vital"><div class="label">SRM</div><div class="value">~32</div></div>
+  <div class="vital"><div class="label">Packaged</div><div class="value">5.0 gal</div></div>
 </div>
 
 <!-- ================= STYLE PROFILE (BLONDE) ================= -->
@@ -409,6 +455,78 @@
   </ul>
 </section>
 
+<!-- ================= SHOPPING — VIT ================= -->
+<section class="vit-only" id="shopping-vit">
+  <p class="kicker">Shopping</p>
+  <h2>Venkman's Vit — shopping list</h2>
+  <p class="section-note">Scaled ×1.13 from <a href="https://byo.com/recipes/venkman-s-vit/" style="color:var(--secondary)">Chris Colby's original</a> (OG 1.052, 5.1%) for 5.0 gal packaged at the wit-style ABV ceiling.</p>
+  <h3>Grain — ~12 lb total</h3>
+  <table>
+    <thead><tr><th>Amount</th><th>Item</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td class="amount">7 lb 2 oz (3.23 kg)</td><td>Pilsner malt</td><td>base</td></tr>
+      <tr><td class="amount">4 lb 12 oz (2.15 kg)</td><td>Wheat malt</td><td>the wit half</td></tr>
+      <tr><td class="amount">3 oz (85 g)</td><td>Dehusked black patent</td><td>the schwarz half — color, no roast bite</td></tr>
+    </tbody>
+  </table>
+  <h3>Hops, yeast &amp; sundries</h3>
+  <ul class="plain-list">
+    <li><span class="mono">0.85 oz</span> Santiam (~6% AA) · <span class="mono">0.6 oz</span> Sterling.</li>
+    <li>Wyeast 3463 (Forbidden Fruit).</li>
+    <li><span class="mono">1</span> Oro Blanco grapefruit — you'll zest half of it, post-FG.</li>
+    <li>Priming: <span class="mono">7 oz (200 g)</span> cane sugar (heavy glass) or <span class="mono">5.5 oz (156 g)</span> (standard longnecks).</li>
+  </ul>
+</section>
+
+<!-- ================= SHOPPING — RADISH ================= -->
+<section class="radish-only" id="shopping-radish">
+  <p class="kicker">Shopping</p>
+  <h2>Black Radish — shopping list</h2>
+  <p class="section-note">Scaled ×1.14 from <a href="https://byo.com/recipes/weeping-radish-farm-brewery-black-radish-clone/" style="color:var(--secondary)">Marc Martin's clone</a> (OG 1.048, 4.7%) for 5.0 gal packaged at the schwarzbier OG ceiling.</p>
+  <h3>Grain — ~11.5 lb total</h3>
+  <table>
+    <thead><tr><th>Amount</th><th>Item</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td class="amount">8.5 lb (3.86 kg)</td><td>2-row pale malt</td><td>base</td></tr>
+      <tr><td class="amount">2.25 lb (1.02 kg)</td><td>Munich malt</td><td>melanoidin depth</td></tr>
+      <tr><td class="amount">11.5 oz (326 g)</td><td>Chocolate malt (375°L)</td><td>roast, color</td></tr>
+    </tbody>
+  </table>
+  <h3>Hops, yeast &amp; sundries</h3>
+  <ul class="plain-list">
+    <li><span class="mono">1.75 oz</span> Mt. Hood (~6.5% AA) total — <span class="mono">1.15 oz</span> bittering + <span class="mono">0.6 oz</span> flavor.</li>
+    <li>WLP830 (German Lager) / Wyeast 2308 (Munich Lager) — <span class="mono">2</span> packs, or <span class="mono">1</span> + a <span class="mono">1.5–2 L</span> starter.</li>
+    <li><span class="mono">½ tsp</span> Irish moss.</li>
+    <li>Priming: <span class="mono">¾ cup (150 g)</span> dextrose.</li>
+  </ul>
+</section>
+
+<!-- ================= SHOPPING — SCHWARZ ================= -->
+<section class="schwarz-only" id="shopping-schwarz">
+  <p class="kicker">Shopping</p>
+  <h2>Schwarzbier — shopping list</h2>
+  <p class="section-note">Scaled ×1.13 from <a href="https://byo.com/recipes/dave-helt-s-schwarzbier/" style="color:var(--secondary)">Dave Helt's Best-of-Show recipe</a> (OG 1.050, 4.1% — Drunk Monk Challenge, 735 entries) for 5.0 gal packaged, ABV lifted into the 4.4–5.4% style band.</p>
+  <h3>Grain — ~12.5 lb total</h3>
+  <table>
+    <thead><tr><th>Amount</th><th>Item</th></tr></thead>
+    <tbody>
+      <tr><td class="amount">5.1 lb (2.31 kg)</td><td>Maris Otter malt</td></tr>
+      <tr><td class="amount">2.25 lb (1.02 kg)</td><td>Vienna malt</td></tr>
+      <tr><td class="amount">1.7 lb (0.77 kg)</td><td>Munich malt</td></tr>
+      <tr><td class="amount">1.1 lb (0.5 kg)</td><td>Flaked barley</td></tr>
+      <tr><td class="amount">1.1 lb (0.5 kg)</td><td>Dehusked Carafa II</td></tr>
+      <tr><td class="amount">0.6 lb (272 g)</td><td>CaraPils</td></tr>
+      <tr><td class="amount">0.6 lb (272 g)</td><td>Pale chocolate malt</td></tr>
+    </tbody>
+  </table>
+  <h3>Hops, yeast &amp; sundries</h3>
+  <ul class="plain-list">
+    <li><span class="mono">2.0 oz</span> US Goldings (~4.5% AA).</li>
+    <li>Wyeast 1056 (American Ale) — <span class="mono">2</span> packs, or <span class="mono">⅔ cup</span> slurry from a previous batch.</li>
+    <li>Priming: <span class="mono">4.5 oz (128 g)</span> corn sugar.</li>
+  </ul>
+</section>
+
 <!-- ================= BREW DAY — RED ================= -->
 <section class="red-only" id="brewday-red">
   <p class="kicker">Brew day</p>
@@ -477,6 +595,89 @@
   </ol>
 </section>
 
+<!-- ================= BREW DAY — VIT ================= -->
+<section class="vit-only" id="brewday-vit">
+  <p class="kicker">Brew day</p>
+  <h2>Venkman's Vit — brew day</h2>
+  <p class="section-note"><strong>90-min vigorous boil</strong> · 5.25 gal into fermenter → ~5.0 gal packaged.</p>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Dough in with <span class="mono">18 qt (4.5 gal)</span> liquor to hit <span class="mono">152°F</span>.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Mash at <span class="mono">152°F</span>.<span class="badge">60 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Collect <span class="mono">5.8 gal</span>; add <span class="mono">1 gal</span> top-up water (pre-boil <span class="mono">6.8 gal</span>).</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Pre-boil gravity ~<span class="mono">1.043</span>.</strong></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Boil hard. <span class="mono">0.85 oz</span> Santiam @ 60.<span class="badge">90 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">0.6 oz</span> Sterling @ 10.<span class="badge">10 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Chill to <span class="mono">70°F</span>; <span class="mono">5.25 gal</span> into the fermenter.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — OG gate</span><span class="step-text"><strong>OG <span class="mono">1.056 ±.003</span>.</strong> Record it before pitching.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Pitch Wyeast 3463 (Forbidden Fruit) at <span class="mono">70°F</span>.</span></div></li>
+  </ol>
+</section>
+
+<!-- ================= BREW DAY — RADISH ================= -->
+<section class="radish-only" id="brewday-radish">
+  <p class="kicker">Brew day</p>
+  <h2>Black Radish — brew day</h2>
+  <p class="section-note">60-min boil · 5.25 gal into fermenter → ~5.0 gal packaged.</p>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Strike <span class="mono">4 gal @ 172°F</span> → stabilize at <span class="mono">154°F</span>.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Mash at <span class="mono">154°F</span>.<span class="badge">60 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Sparge slowly @ <span class="mono">175°F</span>; collect <span class="mono">6.3 gal</span>.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Pre-boil gravity ~<span class="mono">1.043</span>.</strong></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Boil. <span class="mono">1.15 oz</span> Mt. Hood @ 60.<span class="badge">60 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">0.6 oz</span> Mt. Hood @ 20.<span class="badge">20 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">½ tsp</span> Irish moss @ 15.<span class="badge">15 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Chill to ≤<span class="mono">75°F</span>; <span class="mono">5.25 gal</span> into the fermenter; aerate heavily.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — OG gate</span><span class="step-text"><strong>OG <span class="mono">1.052 ±.003</span>.</strong> Record it before pitching.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Pitch lager yeast; let the beer settle to <span class="mono">65°F</span> over a few hours.</span></div></li>
+  </ol>
+</section>
+
+<!-- ================= BREW DAY — SCHWARZ ================= -->
+<section class="schwarz-only" id="brewday-schwarz">
+  <p class="kicker">Brew day</p>
+  <h2>Schwarzbier — brew day</h2>
+  <p class="section-note"><strong>90-min boil</strong> · 5.25 gal into fermenter → ~5.0 gal packaged.</p>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Dough in with ~<span class="mono">19 qt (4.75 gal)</span> liquor to hit <span class="mono">154°F</span>.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Mash at <span class="mono">154°F</span> — or <span class="mono">150°F</span> for a drier, ~<span class="mono">5.0%</span> version.<span class="badge">60 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Sparge; collect <span class="mono">6.8 gal</span>.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Pre-boil gravity ~<span class="mono">1.042</span>.</strong></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Boil.<span class="badge">90 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">2.0 oz</span> US Goldings @ 30 (<span class="mono">9 AAU</span>).<span class="badge">30 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Chill to <span class="mono">66°F</span>; <span class="mono">5.25 gal</span> into the fermenter.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — OG gate</span><span class="step-text"><strong>OG <span class="mono">1.054 ±.003</span>.</strong> Record it before pitching.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Pitch Wyeast 1056 — <span class="mono">2</span> packs or <span class="mono">⅔ cup</span> slurry.</span></div></li>
+  </ol>
+</section>
+
 <!-- ================= FERMENTATION — RED ================= -->
 <section class="red-only" id="ferment-red">
   <p class="kicker">Fermentation</p>
@@ -514,6 +715,52 @@
   <div class="callout">
     <strong>Dry-finish rescue:</strong> if attenuation stalls, next time hold the cane sugar out of the boil and add it to the fermenter once primary slows — make the yeast finish dinner before dessert. Full attenuation of the simple sugars, not a lower mash temp, is what makes this beer finish dry.
   </div>
+</section>
+
+<!-- ================= FERMENTATION — VIT ================= -->
+<section class="vit-only" id="ferment-vit">
+  <p class="kicker">Fermentation</p>
+  <h2>Venkman's Vit — fermentation</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Ferment at <span class="mono">70°F</span> until activity slows.<span class="badge">days 1–4</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Free rise to <span class="mono">76°F</span> to finish.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — FG gate</span><span class="step-text"><strong>FG ~<span class="mono">1.014</span>, stable</strong> — two matching readings two days apart. No zest before this passes.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Zest of <span class="mono">½</span> Oro Blanco grapefruit — zero pith — into secondary.<span class="badge">3–4 d</span></span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Gravity unchanged</strong> — confirm before packaging. Zest shouldn't referment; verify anyway.</span></div></li>
+  </ol>
+</section>
+
+<!-- ================= FERMENTATION — RADISH ================= -->
+<section class="radish-only" id="ferment-radish">
+  <p class="kicker">Fermentation</p>
+  <h2>Black Radish — fermentation</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">At the first signs of fermentation, drop to <span class="mono">52°F</span>.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Hold <span class="mono">52°F</span> until fermentation is complete.<span class="badge">~2–3 wk</span></span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — FG gate</span><span class="step-text"><strong>FG ~<span class="mono">1.013</span>, stable</strong> — two matching readings two days apart.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Condition at <span class="mono">42°F</span>.<span class="badge">2 wk</span></span></div></li>
+  </ol>
+</section>
+
+<!-- ================= FERMENTATION — SCHWARZ ================= -->
+<section class="schwarz-only" id="ferment-schwarz">
+  <p class="kicker">Fermentation</p>
+  <h2>Schwarzbier — fermentation</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Ferment at <span class="mono">66–68°F</span>.<span class="badge">1–2 wk</span></span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — FG gate</span><span class="step-text"><strong>FG ~<span class="mono">1.020</span>, stable</strong> — two matching readings two days apart. A full finish is this winner's character; don't chase it lower.</span></div></li>
+  </ol>
 </section>
 
 <!-- ================= FORK PANELS (RED, post-FG only) ================= -->
@@ -617,11 +864,81 @@
   </ul>
 </section>
 
+<!-- ================= PACKAGING + TIMELINE — VIT ================= -->
+<section class="vit-only" id="packaging-vit">
+  <p class="kicker">Packaging</p>
+  <h2>Venkman's Vit — packaging</h2>
+  <div class="callout warn">
+    <strong>Glass check.</strong> At the <span class="mono">3.0</span>-volume top end, use heavy glass — German wheat-beer bottles. Standard longnecks are <strong>not rated</strong> for 3.0 volumes: prime them to ~<span class="mono">2.7</span> instead.
+  </div>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Heavy glass: <span class="mono">7 oz (200 g)</span> cane sugar → ~<span class="mono">3.0 volumes</span>; condition 2 wk @ <span class="mono">70°F</span>.<span class="badge">2 wk</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Standard longnecks: <span class="mono">5.5 oz (156 g)</span> cane sugar → ~<span class="mono">2.7 volumes</span>.<span class="badge">2 wk</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Keg: <span class="mono">12 psi @ 38°F</span>.</span></div></li>
+  </ol>
+  <h3>Timeline</h3>
+  <ul class="calendar">
+    <li><span class="date">Day 0</span><span>Brew day</span></li>
+    <li><span class="date">Days 1–7</span><span>Ferment 70 → 76°F</span></li>
+    <li><span class="date">~Day 10</span><span>FG gate</span></li>
+    <li><span class="date">Days 10–14</span><span>Zest, 3–4 d contact</span></li>
+    <li><span class="date">~Day 14</span><span>Package</span></li>
+    <li><span class="date">~Week 4</span><span>Pour — wit character fades fast, drink it young</span></li>
+  </ul>
+</section>
+
+<!-- ================= PACKAGING + TIMELINE — RADISH ================= -->
+<section class="radish-only" id="packaging-radish">
+  <p class="kicker">Packaging</p>
+  <h2>Black Radish — packaging</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Bottle: <span class="mono">¾ cup (150 g)</span> dextrose → ~<span class="mono">2.4 volumes</span> (longneck-safe). Or keg: <span class="mono">10–12 psi @ 38°F</span>.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Carbonate &amp; age.<span class="badge">2–4 wk</span></span></div></li>
+  </ol>
+  <h3>Timeline</h3>
+  <ul class="calendar">
+    <li><span class="date">Day 0</span><span>Brew day; settle to 65°F</span></li>
+    <li><span class="date">Day 1</span><span>Activity starts → drop to 52°F</span></li>
+    <li><span class="date">Weeks 1–3</span><span>Primary @ 52°F → FG gate</span></li>
+    <li><span class="date">Weeks 4–5</span><span>Condition @ 42°F</span></li>
+    <li><span class="date">Week 5</span><span>Package</span></li>
+    <li><span class="date">Weeks 7–9</span><span>Pour</span></li>
+  </ul>
+</section>
+
+<!-- ================= PACKAGING + TIMELINE — SCHWARZ ================= -->
+<section class="schwarz-only" id="packaging-schwarz">
+  <p class="kicker">Packaging</p>
+  <h2>Schwarzbier — packaging</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Bottle: <span class="mono">4.5 oz (128 g)</span> corn sugar → ~<span class="mono">2.5 volumes</span>. Or keg: <span class="mono">10–12 psi @ 38°F</span>.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Lager at <span class="mono">38°F</span> — the patience is the recipe.<span class="badge">4 months</span></span></div></li>
+  </ol>
+  <h3>Timeline</h3>
+  <ul class="calendar">
+    <li><span class="date">Day 0</span><span>Brew day</span></li>
+    <li><span class="date">Weeks 1–2</span><span>Primary @ 66–68°F → FG gate</span></li>
+    <li><span class="date">~Week 3</span><span>Package</span></li>
+    <li><span class="date">Months 1–4</span><span>Lager @ 38°F</span></li>
+    <li><span class="date">Month 4+</span><span>Pour — it won Best of Show for a reason</span></li>
+  </ul>
+</section>
+
 <!-- ================= QUICK REFERENCE ================= -->
 <section id="quickref">
   <p class="kicker">Quick reference</p>
   <h2 class="red-only">Red IPA — garage card</h2>
   <h2 class="blonde-only">Belgian Blonde — garage card</h2>
+  <h2 class="vit-only">Venkman's Vit — garage card</h2>
+  <h2 class="radish-only">Black Radish — garage card</h2>
+  <h2 class="schwarz-only">Schwarzbier — garage card</h2>
 
   <div class="quickref red-only" id="quickref-red">
 <pre><b>RED IPA</b>    OG 1.065 ±.003 · FG 1.012–1.014 · 6.8% · ~57 IBU · SRM 15
@@ -651,12 +968,43 @@
 <b>PACKAGE</b>    3.2vol = 6.3oz sugar → HEAVY GLASS ONLY · 3wk@70–75°F
            std bottles 5oz → ~2.7vol · keg 30psi@38°F 10d, vent to serve</pre>
   </div>
+
+  <div class="quickref vit-only" id="quickref-vit">
+<pre><b>VIT</b>        OG 1.056 ±.003 · FG ~1.014 · 5.5% · 20 IBU · SRM ~16
+<b>GRAIN</b>      7lb2oz Pilsner · 4lb12oz wheat · 3oz dehusked black patent
+<b>MASH</b>       152°F/60min · 18qt liquor · collect 5.8gal + 1gal water
+           BOIL 90min, vigorous
+<b>HOPS</b>       Santiam 0.85oz@60 · Sterling 0.6oz@10
+<b>FERMENT</b>    Wy3463 @70°F → free rise 76°F · FG gate → zest ½ Oro Blanco 3–4d
+<b>PACKAGE</b>    7oz cane → ~3.0vol HEAVY GLASS · longnecks 5.5oz → ~2.7vol
+           keg 12psi@38°F · 5.0gal out · drink young</pre>
+  </div>
+
+  <div class="quickref radish-only" id="quickref-radish">
+<pre><b>RADISH</b>     OG 1.052 ±.003 · FG ~1.013 · 5.1% · 26 IBU · SRM 23
+<b>GRAIN</b>      8.5lb 2-row · 2.25lb Munich · 11.5oz chocolate 375°L
+<b>MASH</b>       strike 4gal@172°F → 154°F/60min · sparge 175°F · collect 6.3gal
+           BOIL 60min
+<b>HOPS</b>       Mt.Hood 1.15oz@60 · 0.6oz@20 · Irish moss ½tsp@15
+<b>FERMENT</b>    WLP830/2308 ×2 · pitch ≤75°F → 65°F → 52°F to FG · 2wk@42°F
+<b>PACKAGE</b>    ¾cup dextrose → ~2.4vol · keg 10–12psi@38°F · age 2–4wk · 5.0gal out</pre>
+  </div>
+
+  <div class="quickref schwarz-only" id="quickref-schwarz">
+<pre><b>SCHWARZ</b>    OG 1.054 ±.003 · FG ~1.020 · ~4.5% · 30 IBU · SRM ~32
+<b>GRAIN</b>      5.1 MO · 2.25 Vienna · 1.7 Munich · 1.1 flaked barley
+           1.1 Carafa II · 0.6 CaraPils · 0.6 pale choc
+<b>MASH</b>       154°F/60min (150°F → drier, ~5.0%) · collect 6.8gal · BOIL 90min
+<b>HOPS</b>       US Goldings 2oz@30 (9 AAU)
+<b>FERMENT</b>    Wy1056 ×2 or ⅔cup slurry · 66–68°F · FG ~1.020 full finish
+<b>PACKAGE</b>    4.5oz corn → ~2.5vol · keg 10–12psi@38°F · LAGER 38°F 4mo · 5.0gal out</pre>
+  </div>
 </section>
 
 </main>
 
 <footer>
-  Second Summer — two brews, five beers. Checkboxes reset on reload by design. All checkpoints: two matching gravity readings, two days apart.
+  Second Summer — five brews, eight beers. Checkboxes reset on reload by design. All checkpoints: two matching gravity readings, two days apart.
 </footer>
 
 <script>

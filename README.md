@@ -1,6 +1,6 @@
 # Second Summer Brew Guide
 
-Two brews, five beers — single-file static brew guide.
+Five brews, eight beers — single-file static brew guide.
 
 Live: https://carbonated-geek-commit.github.io/second-summer-brew-guide/
 
