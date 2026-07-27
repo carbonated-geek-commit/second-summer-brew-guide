@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en" data-brew="red" data-path="classic">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Second Summer — Two Brews, Five Beers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Instrument+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1C1113;
+    --panel:#26161A;
+    --text:#F3E9DB;
+    --secondary:#C98E52;
+    --hairline:rgba(243,233,219,.14);
+    --amber:#D9A63C;
+    --accent:#CB4F3C;
+    --beer-top:#D96A3F;
+    --beer-bottom:#7A2A1E;
+  }
+  html[data-path="grapefruit"]{ --accent:#EF6A5A; --beer-top:#E8894F; --beer-bottom:#8F3A22; }
+  html[data-path="cherry"]{ --accent:#C63A55; --beer-top:#C4514E; --beer-bottom:#5C1B27; }
+  html[data-path="blackberry"]{ --accent:#9A6BB4; --beer-top:#8D5673; --beer-bottom:#37203F; }
+  html[data-brew="blonde"]{ --accent:#D9A63C; --beer-top:#F0C75E; --beer-bottom:#B87C20; }
+
+  html[data-brew="blonde"] .red-only{ display:none !important; }
+  html[data-brew="red"] .blonde-only{ display:none !important; }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *, *::before, *::after{ transition:none !important; animation:none !important; }
+  }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Instrument Sans", sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{ max-width:720px; margin:0 auto; padding:0 16px 64px; }
+  h1,h2,h3{ font-family:"Bricolage Grotesque", sans-serif; line-height:1.15; }
+  h2{ font-size:1.5rem; font-weight:800; margin:48px 0 4px; }
+  h3{ font-size:1.05rem; font-weight:700; margin:20px 0 8px; }
+  .kicker{
+    font-family:"Spline Sans Mono", monospace;
+    font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent); transition:color .25s;
+  }
+  .section-note{ color:var(--secondary); font-size:.9rem; margin-bottom:16px; }
+  .mono{ font-family:"Spline Sans Mono", monospace; }
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(28,17,19,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--hairline);
+    padding:10px 16px;
+  }
+  .topbar-inner{ max-width:720px; margin:0 auto; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .brand{
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:800; font-size:1rem;
+    margin-right:auto; white-space:nowrap;
+  }
+  .brand span{ color:var(--accent); transition:color .25s; }
+  .switcher{ display:flex; gap:0; border:1px solid var(--hairline); border-radius:999px; overflow:hidden; }
+  .switcher button{
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:.8rem;
+    background:none; border:none; color:var(--text); padding:7px 14px; cursor:pointer;
+    transition:background .2s, color .2s;
+  }
+  html[data-brew="red"] .switcher button[data-brew-btn="red"],
+  html[data-brew="blonde"] .switcher button[data-brew-btn="blonde"]{
+    background:var(--accent); color:#1C1113;
+  }
+  .chips{ display:flex; gap:6px; flex-wrap:wrap; width:100%; }
+  .chip{
+    font-family:"Instrument Sans", sans-serif; font-weight:600; font-size:.75rem;
+    background:none; border:1px solid var(--hairline); border-radius:999px;
+    color:var(--text); padding:5px 12px; cursor:pointer; transition:border-color .2s, background .2s, color .2s;
+  }
+  html[data-path="classic"] .chip[data-path-btn="classic"],
+  html[data-path="grapefruit"] .chip[data-path-btn="grapefruit"],
+  html[data-path="cherry"] .chip[data-path-btn="cherry"],
+  html[data-path="blackberry"] .chip[data-path-btn="blackberry"]{
+    background:var(--accent); border-color:var(--accent); color:#1C1113;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{ display:flex; gap:24px; align-items:center; padding:40px 0 8px; }
+  .hero-copy h1{ font-size:clamp(2rem, 8vw, 3rem); font-weight:800; }
+  .hero-copy p{ color:var(--secondary); margin-top:8px; max-width:34ch; }
+  .glass{ flex:0 0 auto; width:96px; height:150px; position:relative; }
+  .glass-body{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, var(--beer-top), var(--beer-bottom));
+    border:2px solid rgba(243,233,219,.35);
+    border-top:none;
+    border-radius:6px 6px 14px 14px;
+    clip-path:polygon(0 0, 100% 0, 88% 100%, 12% 100%);
+    transition:background .4s;
+  }
+  .glass-foam{
+    position:absolute; top:-7px; left:4px; right:4px; height:16px;
+    background:#F3E9DB; border-radius:8px; opacity:.95;
+  }
+  .glass-shine{
+    position:absolute; top:14px; bottom:14px; left:16px; width:7px;
+    background:rgba(243,233,219,.25); border-radius:4px;
+  }
+
+  .vitals{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:24px 0 8px; }
+  .vital{
+    background:var(--panel); border:1px solid var(--hairline); border-radius:10px;
+    padding:10px 12px;
+  }
+  .vital .label{
+    font-size:.68rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--secondary);
+  }
+  .vital .value{ font-family:"Spline Sans Mono", monospace; font-weight:600; font-size:.95rem; margin-top:2px; }
+
+  /* ---------- cards ---------- */
+  .cards{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:520px){ .cards{ grid-template-columns:1fr; } }
+  .card{
+    background:var(--panel); border:1px solid var(--hairline); border-radius:12px;
+    padding:16px; display:flex; flex-direction:column; gap:8px;
+  }
+  .card h3{ margin:0; }
+  .card .meta{ font-size:.83rem; color:var(--secondary); }
+  .card .ratings{ font-family:"Spline Sans Mono", monospace; font-size:.78rem; line-height:1.8; }
+  .pick{
+    margin-top:auto; align-self:flex-start;
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:.8rem;
+    background:none; border:1px solid var(--hairline); border-radius:999px;
+    color:var(--text); padding:7px 16px; cursor:pointer; transition:background .2s, border-color .2s, color .2s;
+  }
+  html[data-path="classic"] .pick[data-path-btn="classic"],
+  html[data-path="grapefruit"] .pick[data-path-btn="grapefruit"],
+  html[data-path="cherry"] .pick[data-path-btn="cherry"],
+  html[data-path="blackberry"] .pick[data-path-btn="blackberry"]{
+    background:var(--accent); border-color:var(--accent); color:#1C1113;
+  }
+  html[data-path="classic"] .pick[data-path-btn="classic"]::after,
+  html[data-path="grapefruit"] .pick[data-path-btn="grapefruit"]::after,
+  html[data-path="cherry"] .pick[data-path-btn="cherry"]::after,
+  html[data-path="blackberry"] .pick[data-path-btn="blackberry"]::after{
+    content:" ✓";
+  }
+
+  /* ---------- tables / lists ---------- */
+  table{ width:100%; border-collapse:collapse; font-size:.88rem; }
+  th{
+    text-align:left; font-size:.68rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--secondary); padding:6px 8px 6px 0; border-bottom:1px solid var(--hairline);
+  }
+  td{ padding:7px 8px 7px 0; border-bottom:1px solid var(--hairline); vertical-align:top; }
+  td.amount{ font-family:"Spline Sans Mono", monospace; font-size:.8rem; white-space:nowrap; }
+  .plain-list{ list-style:none; font-size:.9rem; }
+  .plain-list li{ padding:7px 0; border-bottom:1px solid var(--hairline); }
+  .plain-list li:last-child{ border-bottom:none; }
+
+  /* ---------- steps ---------- */
+  .steps{ list-style:none; }
+  .step{
+    display:flex; gap:12px; align-items:flex-start;
+    padding:12px 0; border-bottom:1px solid var(--hairline);
+  }
+  .step:last-child{ border-bottom:none; }
+  .check{
+    flex:0 0 auto; width:26px; height:26px; margin-top:1px;
+    border:2px solid var(--secondary); border-radius:8px; background:none; cursor:pointer;
+    display:grid; place-items:center; color:transparent; font-size:15px; line-height:1;
+    transition:background .15s, border-color .15s, color .15s;
+  }
+  .check[aria-checked="true"]{ background:var(--accent); border-color:var(--accent); color:#1C1113; }
+  .check[aria-checked="true"]::before{ content:"✓"; font-weight:700; }
+  .step.done .step-text{ opacity:.45; text-decoration:line-through; }
+  .step-body{ flex:1; min-width:0; }
+  .step-text{ font-size:.92rem; }
+  .step-text .mono{ font-size:.85em; }
+  .badge{
+    display:inline-block; font-family:"Spline Sans Mono", monospace; font-size:.68rem; font-weight:600;
+    border:1px solid var(--hairline); border-radius:6px; padding:1px 7px; margin-left:6px;
+    color:var(--secondary); white-space:nowrap; vertical-align:middle;
+  }
+  .step.checkpoint{
+    background:rgba(217,166,60,.07);
+    border:1px solid rgba(217,166,60,.45); border-radius:10px;
+    padding:12px; margin:8px 0;
+  }
+  .step.checkpoint .check{ border-color:var(--amber); }
+  .step.checkpoint .check[aria-checked="true"]{ background:var(--amber); border-color:var(--amber); }
+  .step.checkpoint .step-text strong{ color:var(--amber); }
+  .checkpoint-tag{
+    font-family:"Spline Sans Mono", monospace; font-size:.65rem; font-weight:600; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--amber); display:block; margin-bottom:2px;
+  }
+
+  /* ---------- fork panels ---------- */
+  .path-panel{ display:none; background:var(--panel); border:1px solid var(--hairline); border-radius:12px; padding:6px 16px 16px; }
+  html[data-path="classic"] #panel-classic,
+  html[data-path="grapefruit"] #panel-grapefruit,
+  html[data-path="cherry"] #panel-cherry,
+  html[data-path="blackberry"] #panel-blackberry{ display:block; }
+
+  .callout{
+    border:1px solid var(--hairline); border-left:3px solid var(--accent);
+    border-radius:8px; padding:12px 14px; font-size:.88rem; margin:14px 0;
+    transition:border-color .25s;
+  }
+  .callout.warn{
+    border-color:rgba(217,166,60,.5); border-left-color:var(--amber);
+    background:rgba(217,166,60,.07);
+  }
+  .callout.warn strong{ color:var(--amber); }
+
+  /* ---------- calendar ---------- */
+  .calendar{ list-style:none; font-size:.88rem; }
+  .calendar li{ display:flex; gap:12px; padding:8px 0; border-bottom:1px solid var(--hairline); }
+  .calendar li:last-child{ border-bottom:none; }
+  .calendar .date{
+    font-family:"Spline Sans Mono", monospace; font-size:.78rem; font-weight:600;
+    color:var(--accent); flex:0 0 92px; transition:color .25s;
+  }
+
+  /* ---------- quick reference ---------- */
+  .quickref{
+    background:var(--panel); border:1px solid var(--hairline); border-radius:12px;
+    padding:16px; overflow-x:auto;
+  }
+  .quickref pre{
+    font-family:"Spline Sans Mono", monospace; font-size:.72rem; line-height:1.7;
+    color:var(--text); white-space:pre;
+  }
+  .quickref pre b{ color:var(--accent); font-weight:600; transition:color .25s; }
+
+  footer{
+    max-width:720px; margin:0 auto; padding:24px 16px 48px;
+    border-top:1px solid var(--hairline);
+    font-size:.78rem; color:var(--secondary);
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TOPBAR ================= -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Second <span>Summer</span></div>
+    <nav class="switcher" aria-label="Brew switcher">
+      <button type="button" data-brew-btn="red" aria-pressed="true">Red IPA</button>
+      <button type="button" data-brew-btn="blonde" aria-pressed="false">Belgian Blonde</button>
+    </nav>
+    <div class="chips red-only" role="group" aria-label="Fruit path">
+      <button type="button" class="chip" data-path-btn="classic" aria-pressed="true">Classic</button>
+      <button type="button" class="chip" data-path-btn="grapefruit" aria-pressed="false">Grapefruit</button>
+      <button type="button" class="chip" data-path-btn="cherry" aria-pressed="false">Cherry</button>
+      <button type="button" class="chip" data-path-btn="blackberry" aria-pressed="false">Blackberry</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <div class="glass" aria-hidden="true">
+    <div class="glass-foam"></div>
+    <div class="glass-body"></div>
+    <div class="glass-shine"></div>
+  </div>
+  <div class="hero-copy">
+    <p class="kicker">Two brews · Five beers</p>
+    <h1 class="red-only">Red IPA</h1>
+    <h1 class="blonde-only">Belgian Blonde</h1>
+    <p class="red-only">One 4.75-gal base batch, four ways: classic, grapefruit, cherry, blackberry.</p>
+    <p class="blonde-only">BJCP 25A — scaled from Mean Brews' composite of 25 award-winning recipes.</p>
+  </div>
+</section>
+
+<div class="vitals red-only" id="vitals-red">
+  <div class="vital"><div class="label">OG</div><div class="value">1.065 ±.003</div></div>
+  <div class="vital"><div class="label">FG</div><div class="value">1.012–1.014</div></div>
+  <div class="vital"><div class="label">ABV</div><div class="value">6.8%</div></div>
+  <div class="vital"><div class="label">IBU</div><div class="value">~57</div></div>
+  <div class="vital"><div class="label">SRM</div><div class="value">15</div></div>
+  <div class="vital"><div class="label">Batch</div><div class="value">4.75 gal</div></div>
+</div>
+
+<div class="vitals blonde-only" id="vitals-blonde">
+  <div class="vital"><div class="label">OG</div><div class="value">1.060 ±.003</div></div>
+  <div class="vital"><div class="label">FG</div><div class="value">1.008–1.010</div></div>
+  <div class="vital"><div class="label">ABV</div><div class="value">6.7%</div></div>
+  <div class="vital"><div class="label">IBU</div><div class="value">26</div></div>
+  <div class="vital"><div class="label">SRM</div><div class="value">~5</div></div>
+  <div class="vital"><div class="label">Batch</div><div class="value">4.75 gal</div></div>
+</div>
+
+<!-- ================= FORK RATINGS (RED) ================= -->
+<section class="red-only" id="forks">
+  <p class="kicker">The Fork</p>
+  <h2>Pick your path</h2>
+  <p class="section-note">All four start from the same base batch. Fruit goes in post-FG, ~day 14, in a sanitized mesh bag.</p>
+  <div class="cards">
+    <div class="card">
+      <h3>Classic</h3>
+      <p class="meta">No addition — cold crash and package. Fastest to glass.</p>
+      <p class="ratings">Difficulty 2/5 · Taste 4/5<br>Cost $0</p>
+      <button type="button" class="pick" data-path-btn="classic" aria-pressed="true">Brew classic</button>
+    </div>
+    <div class="card">
+      <h3>Grapefruit</h3>
+      <p class="meta">Zest of 5 (zero pith); optional 8 oz juice, keg-only. Contact 3–4 d. No refermentation.</p>
+      <p class="ratings">Difficulty 2/5 · Taste 4/5<br>Cost $5–8</p>
+      <button type="button" class="pick" data-path-btn="grapefruit" aria-pressed="false">Brew grapefruit</button>
+    </div>
+    <div class="card">
+      <h3>Cherry</h3>
+      <p class="meta">4.5 lb frozen pitted (sweet = budget, tart = brighter). Contact 7–10 d. Referments, +~0.3% ABV.</p>
+      <p class="ratings">Difficulty 3/5 · Taste 4.5/5<br>Cost $14–25</p>
+      <button type="button" class="pick" data-path-btn="cherry" aria-pressed="false">Brew cherry</button>
+    </div>
+    <div class="card">
+      <h3>Blackberry</h3>
+      <p class="meta">4.5 lb, frozen ≥ 48 h then thawed. Contact 7–10 d. Referments, +~0.3% ABV.</p>
+      <p class="ratings">Difficulty 3/5 · Taste 5/5<br>Cost $0 foraged / ~$18</p>
+      <button type="button" class="pick" data-path-btn="blackberry" aria-pressed="false">Brew blackberry</button>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Split-batch option:</strong> after FG, rack into 1-gal jugs with 1 lb fruit (or the zest of 1 grapefruit) each; prime <span class="mono">0.9 oz</span> corn sugar per gallon.
+  </div>
+</section>
+
+<!-- ================= SHOPPING — RED ================= -->
+<section class="red-only" id="shopping-red">
+  <p class="kicker">Shopping</p>
+  <h2>Red IPA — shopping list</h2>
+  <h3>Grain — 11.75 lb total</h3>
+  <table>
+    <thead><tr><th>Amount</th><th>Malt</th><th>Role</th></tr></thead>
+    <tbody>
+      <tr><td class="amount">9.5 lb (4.31 kg)</td><td>2-row pale</td><td>base</td></tr>
+      <tr><td class="amount">12 oz (340 g)</td><td>Munich 10L</td><td>malty depth</td></tr>
+      <tr><td class="amount">12 oz (340 g)</td><td>Crystal 40L</td><td>caramel, body</td></tr>
+      <tr><td class="amount">8 oz (227 g)</td><td>Crystal 120L</td><td>toffee, red depth</td></tr>
+      <tr><td class="amount">4 oz (113 g)</td><td>Carafa III dehusked</td><td>red hue, no roast bite</td></tr>
+    </tbody>
+  </table>
+  <h3>Hops, yeast &amp; sundries</h3>
+  <ul class="plain-list">
+    <li><span class="mono">8 oz</span> Cascade (~6% AA) — covers all additions. Optional: <span class="mono">1 oz</span> Centennial for the dry hop, or <span class="mono">1 oz</span> Columbus to replace the 2 oz bittering charge.</li>
+    <li><span class="mono">2 ×</span> SafAle US-05 — or summer alternative: <span class="mono">1</span> pack Omega Lutra kveik.</li>
+    <li><span class="mono">1 tsp</span> gypsum + <span class="mono">½ tsp</span> CaCl₂ (mash) · <span class="mono">½</span> Campden tab if chlorinated tap.</li>
+    <li>Whirlfloc tab + <span class="mono">½ tsp</span> yeast nutrient.</li>
+    <li><span class="mono">4.2 oz</span> corn sugar (bottling).</li>
+    <li>Fruit per your path — see the cards above. Sanitized mesh bag.</li>
+  </ul>
+</section>
+
+<!-- ================= SHOPPING — BLONDE ================= -->
+<section class="blonde-only" id="shopping-blonde">
+  <p class="kicker">Shopping</p>
+  <h2>Belgian Blonde — shopping list</h2>
+  <h3>Fermentables — 10.2 lb total</h3>
+  <table>
+    <thead><tr><th>Amount</th><th>Item</th><th>%</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td class="amount">7.75 lb (3.52 kg)</td><td>Belgian Pilsner</td><td class="amount">76%</td><td>base</td></tr>
+      <tr><td class="amount">1.2 lb (545 g)</td><td>Wheat malt</td><td class="amount">12%</td><td>head + body</td></tr>
+      <tr><td class="amount">8 oz (227 g)</td><td>Aromatic malt</td><td class="amount">5%</td><td>honeyed depth</td></tr>
+      <tr><td class="amount">12 oz (340 g)</td><td>Cane sugar</td><td class="amount">7%</td><td><strong>into the boil @ 10 min — never the mash</strong></td></tr>
+    </tbody>
+  </table>
+  <h3>Hops, yeast &amp; sundries</h3>
+  <ul class="plain-list">
+    <li><span class="mono">1 oz</span> Styrian Goldings (~4.5% AA) · <span class="mono">2 oz</span> Saaz.</li>
+    <li>WLP500 / Wyeast 1214 (Chimay strain) — <span class="mono">2</span> pouches, or <span class="mono">1</span> + a <span class="mono">1.5 L</span> starter. Dry fallback: Lallemand Abbaye.</li>
+    <li><span class="mono">½ tsp</span> CaCl₂ only — soft water, no gypsum.</li>
+    <li>Whirlfloc tab + yeast nutrient.</li>
+    <li><span class="mono">6.3 oz</span> corn sugar (pressure-rated glass) or <span class="mono">5 oz</span> (standard bottles).</li>
+  </ul>
+</section>
+
+<!-- ================= BREW DAY — RED ================= -->
+<section class="red-only" id="brewday-red">
+  <p class="kicker">Brew day</p>
+  <h2>Red IPA — brew day</h2>
+  <p class="section-note">~72% mash efficiency · 60-min boil · 4.75 gal into fermenter. BIAB: 7 gal full-volume, squeeze, no sparge.</p>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Treat liquor: <span class="mono">1 tsp</span> gypsum + <span class="mono">½ tsp</span> CaCl₂ in the mash; <span class="mono">½</span> Campden tab if chlorinated tap.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Strike <span class="mono">4.4 gal @ 165°F</span> → dough in.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Mash at <span class="mono">152°F</span>, stir at 30 min.<span class="badge">60 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Batch sparge <span class="mono">3.5 gal @ 170°F</span>; collect <span class="mono">6.4 gal</span>.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Pre-boil gravity ~<span class="mono">1.048</span>.</strong> Low? Extend the boil slightly or accept a touch less ABV.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Boil. Bittering: <span class="mono">2 oz</span> Cascade @ 60 — or swap in <span class="mono">1 oz</span> Columbus.<span class="badge">60 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">1 oz</span> Cascade @ 15.<span class="badge">15 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Whirlfloc + <span class="mono">½ tsp</span> yeast nutrient @ 10.<span class="badge">10 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">1 oz</span> Cascade @ 5.<span class="badge">5 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Flameout → cool to <span class="mono">170°F</span> → whirlpool <span class="mono">2 oz</span> Cascade.<span class="badge">20 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Chill to ≤ <span class="mono">65°F</span>; <span class="mono">4.75 gal</span> into the fermenter.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — OG gate</span><span class="step-text"><strong>OG <span class="mono">1.065 ±.003</span>.</strong> Record it before pitching.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Pitch <span class="mono">2 ×</span> US-05 at ≤ <span class="mono">65°F</span> — or <span class="mono">1</span> pack Lutra kveik at <span class="mono">75–90°F</span>.</span></div></li>
+  </ol>
+</section>
+
+<!-- ================= BREW DAY — BLONDE ================= -->
+<section class="blonde-only" id="brewday-blonde">
+  <p class="kicker">Brew day</p>
+  <h2>Belgian Blonde — brew day</h2>
+  <p class="section-note">~72% mash efficiency · <strong>75-min boil</strong> · 4.75 gal into fermenter. BIAB: 7.2 gal full-volume.</p>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Treat liquor: <span class="mono">½ tsp</span> CaCl₂ only — soft water, no gypsum.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Strike <span class="mono">3.5 gal @ 160°F</span> → dough in. Sugar stays out of the mash.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Mash at <span class="mono">149°F</span>.<span class="badge">60 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Sparge <span class="mono">4.3 gal @ 170°F</span>; collect <span class="mono">6.7 gal</span>.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Pre-boil gravity ~<span class="mono">1.038</span></strong> — before sugar.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Boil. <span class="mono">1 oz</span> Styrian Goldings @ 60 (~<span class="mono">16 IBU</span>).<span class="badge">75 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">1 oz</span> Saaz @ 15.<span class="badge">15 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">12 oz</span> cane sugar into the boil @ 10 — <strong>never the mash</strong>. Whirlfloc + nutrient @ 10.<span class="badge">10 min</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text"><span class="mono">1 oz</span> Saaz @ flameout.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Chill to <span class="mono">65°F</span>; <span class="mono">4.75 gal</span> into the fermenter.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — OG gate</span><span class="step-text"><strong>OG <span class="mono">1.060 ±.003</span>.</strong> Record it before pitching.</span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Pitch WLP500 / Wyeast 1214 — <span class="mono">2</span> pouches, or <span class="mono">1</span> + a <span class="mono">1.5 L</span> starter — at <span class="mono">65°F</span>.</span></div></li>
+  </ol>
+</section>
+
+<!-- ================= FERMENTATION — RED ================= -->
+<section class="red-only" id="ferment-red">
+  <p class="kicker">Fermentation</p>
+  <h2>Red IPA — fermentation</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Hold <span class="mono">64–66°F</span>.<span class="badge">days 1–4</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Dry hop day 4: <span class="mono">2 oz</span> Cascade (+ optional <span class="mono">1 oz</span> Centennial).<span class="badge">day 4</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Free rise <span class="mono">68–70°F</span> to finish.</span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — FG gate</span><span class="step-text"><strong>FG <span class="mono">1.012–1.014</span>, stable</strong> — two matching readings two days apart (days 10 &amp; 12). Nothing moves forward until this passes.</span></div></li>
+  </ol>
+  <div class="callout">
+    <strong>Summer alternative:</strong> <span class="mono">1</span> pack Omega Lutra kveik @ <span class="mono">75–90°F</span>, dry hop day 2, FG by ~day 5. Same FG gate applies: two matching readings two days apart.
+  </div>
+</section>
+
+<!-- ================= FERMENTATION — BLONDE ================= -->
+<section class="blonde-only" id="ferment-blonde">
+  <p class="kicker">Fermentation</p>
+  <h2>Belgian Blonde — fermentation</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Hold <span class="mono">65–66°F</span>.<span class="badge">days 1–3</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Free rise to <span class="mono">73°F</span> — let the esters build.<span class="badge">days 3–10</span></span></div></li>
+    <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="checkpoint-tag">Checkpoint — FG gate</span><span class="step-text"><strong>FG <span class="mono">1.008–1.010</span>, stable</strong> — two matching readings two days apart (days 10 &amp; 14).</span></div></li>
+  </ol>
+</section>
+
+<!-- ================= FORK PANELS (RED, post-FG only) ================= -->
+<section class="red-only" id="fork-panels">
+  <p class="kicker">Your path</p>
+  <h2>After the FG gate</h2>
+  <p class="section-note">Everything below assumes the FG checkpoint above has passed. Fruit goes in ~day 14, in a sanitized mesh bag.</p>
+
+  <div class="path-panel" id="panel-classic">
+    <h3>Classic — straight to the glass</h3>
+    <ol class="steps">
+      <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="step-text">No addition. Cold crash <span class="mono">24–48 h</span> and head to packaging.<span class="badge">24–48 h</span></span></div></li>
+    </ol>
+  </div>
+
+  <div class="path-panel" id="panel-grapefruit">
+    <h3>Grapefruit — zest, not pith</h3>
+    <ol class="steps">
+      <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="step-text">Zest of <span class="mono">5</span> grapefruit — zero pith — into a sanitized mesh bag.<span class="badge">3–4 d</span></span></div></li>
+      <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="step-text">Optional: <span class="mono">8 oz</span> juice — <strong>keg-only</strong>, never in bottles.</span></div></li>
+      <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Gravity stable</strong> — two matching readings two days apart — before packaging. Zest shouldn't referment; confirm anyway.</span></div></li>
+    </ol>
+    <div class="callout">
+      <strong>Tincture option:</strong> zest in <span class="mono">4 oz</span> vodka × 3 d, dose to taste at packaging. Zero refermentation risk.
+    </div>
+  </div>
+
+  <div class="path-panel" id="panel-cherry">
+    <h3>Cherry — the refermenter</h3>
+    <ol class="steps">
+      <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="step-text"><span class="mono">4.5 lb</span> frozen pitted cherries (sweet = budget, tart = brighter) in a sanitized mesh bag.<span class="badge">7–10 d</span></span></div></li>
+      <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="step-text">Expect refermentation: airlock activity, +~<span class="mono">0.3%</span> ABV.</span></div></li>
+      <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Gravity stable again</strong> — two matching readings two days apart. Never package before this passes.</span></div></li>
+    </ol>
+  </div>
+
+  <div class="path-panel" id="panel-blackberry">
+    <h3>Blackberry — the sleeper hit</h3>
+    <ol class="steps">
+      <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="step-text"><span class="mono">4.5 lb</span> blackberries, frozen ≥ <span class="mono">48 h</span> then thawed, in a sanitized mesh bag.<span class="badge">7–10 d</span></span></div></li>
+      <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="step-text">Expect refermentation: airlock activity, +~<span class="mono">0.3%</span> ABV.</span></div></li>
+      <li class="step checkpoint"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+        <div class="step-body"><span class="checkpoint-tag">Checkpoint</span><span class="step-text"><strong>Gravity stable again</strong> — two matching readings two days apart. Never package before this passes.</span></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= PACKAGING + CALENDAR — RED ================= -->
+<section class="red-only" id="packaging-red">
+  <p class="kicker">Packaging</p>
+  <h2>Red IPA — packaging</h2>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Cold crash.<span class="badge">24–48 h</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Bottle: <span class="mono">4.2 oz</span> corn sugar / <span class="mono">4.75 gal</span>; condition 2 weeks @ <span class="mono">70°F</span>. Or keg: <span class="mono">10–12 psi @ 38°F</span>.<span class="badge">2 wk</span></span></div></li>
+  </ol>
+  <h3>Calendar</h3>
+  <ul class="calendar">
+    <li><span class="date">Aug 1</span><span>Brew day</span></li>
+    <li><span class="date">Aug 5</span><span>Dry hop</span></li>
+    <li><span class="date">Aug 11–13</span><span>FG stable</span></li>
+    <li><span class="date">Aug 14</span><span>Fruit in (fruited paths)</span></li>
+    <li><span class="date">Aug 18–24</span><span>Package</span></li>
+    <li><span class="date">Sept 1–7</span><span>Pouring</span></li>
+    <li><span class="date">Mid-Sept</span><span>Peak</span></li>
+  </ul>
+</section>
+
+<!-- ================= PACKAGING + CALENDAR — BLONDE ================= -->
+<section class="blonde-only" id="packaging-blonde">
+  <p class="kicker">Packaging</p>
+  <h2>Belgian Blonde — packaging</h2>
+  <div class="callout warn">
+    <strong>Heavy glass only at style carbonation.</strong> The 3.2-volume target belongs in pressure-rated glass — Belgian 750 cork-and-cage, champagne, heavy swing-top. Standard longneck bottles are <strong>not rated</strong> for 3.2 volumes of CO₂ — never put this carbonation level in them. In standard bottles, prime to ~2.7 volumes instead.
+  </div>
+  <ol class="steps">
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Style carbonation: <span class="mono">3.2 volumes</span> CO₂ = <span class="mono">6.3 oz</span> corn sugar / <span class="mono">4.75 gal</span> — <strong>pressure-rated glass only</strong>; condition 3 weeks @ <span class="mono">70–75°F</span>.<span class="badge">3 wk</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Standard bottles: <span class="mono">5 oz</span> corn sugar → ~<span class="mono">2.7 volumes</span>.<span class="badge">3 wk</span></span></div></li>
+    <li class="step"><button type="button" class="check" role="checkbox" aria-checked="false" aria-label="Done"></button>
+      <div class="step-body"><span class="step-text">Keg: ~<span class="mono">30 psi @ 38°F</span> for 10 days, then vent to serving pressure.<span class="badge">10 d</span></span></div></li>
+  </ol>
+  <h3>Calendar</h3>
+  <ul class="calendar">
+    <li><span class="date">Aug 8</span><span>Brew day</span></li>
+    <li><span class="date">Aug 11</span><span>Free rise begins</span></li>
+    <li><span class="date">Aug 18–22</span><span>Package</span></li>
+    <li><span class="date">Mid-Sept</span><span>First pour</span></li>
+    <li><span class="date">October</span><span>Peak</span></li>
+  </ul>
+</section>
+
+<!-- ================= QUICK REFERENCE ================= -->
+<section id="quickref">
+  <p class="kicker">Quick reference</p>
+  <h2 class="red-only">Red IPA — garage card</h2>
+  <h2 class="blonde-only">Belgian Blonde — garage card</h2>
+
+  <div class="quickref red-only" id="quickref-red">
+<pre><b>RED IPA</b>    OG 1.065 ±.003 · FG 1.012–1.014 · 6.8% · ~57 IBU · SRM 15
+<b>GRAIN</b>      9.5lb 2-row · 12oz Munich 10L · 12oz C40 · 8oz C120 · 4oz Carafa III
+<b>MASH</b>       152°F/60min · strike 4.4gal@165°F · sparge 3.5gal@170°F
+           collect 6.4gal (~1.048) · BIAB 7gal
+<b>SALTS</b>      1tsp gypsum + ½tsp CaCl₂ · ½ Campden if chlorinated
+<b>HOPS</b>       Cascade ~6%AA: 2oz@60 · 1oz@15 · 1oz@5 · 2oz WP 170°F/20min
+           2oz DH day4 (+opt 1oz Centennial) · Whirlfloc+½tsp nutrient@10
+<b>FERMENT</b>    2×US-05 ≤65°F · 64–66°F d1–4 · DH d4 · rise 68–70°F · FG d10&amp;12
+<b>PACKAGE</b>    crash 24–48h · 4.2oz sugar/4.75gal · 2wk@70°F · keg 10–12psi@38°F
+<b>FRUIT</b>      post-FG d14: GF zest×5 3–4d · cherry 4.5lb 7–10d · bberry 4.5lb 7–10d
+           fruited paths: gravity stable AGAIN before packaging</pre>
+  </div>
+
+  <div class="quickref blonde-only" id="quickref-blonde">
+<pre><b>BLONDE</b>     OG 1.060 ±.003 · FG 1.008–1.010 · 6.7% · 26 IBU · SRM ~5
+<b>GRIST</b>      7.75lb Belgian Pils · 1.2lb wheat · 8oz aromatic
+           12oz cane sugar → BOIL @10min, never the mash
+<b>MASH</b>       149°F/60min · strike 3.5gal@160°F · sparge 4.3gal@170°F
+           collect 6.7gal (~1.038 pre-sugar) · BIAB 7.2gal · BOIL 75min
+<b>SALTS</b>      ½tsp CaCl₂ only — no gypsum
+<b>HOPS</b>       Styrian 1oz@60 (~16 IBU) · Saaz 1oz@15 · Saaz 1oz@FO
+<b>FERMENT</b>    WLP500/1214 ×2 · pitch 65°F · 65–66°F d1–3 · rise 73°F d3–10
+           FG d10&amp;14
+<b>PACKAGE</b>    3.2vol = 6.3oz sugar → HEAVY GLASS ONLY · 3wk@70–75°F
+           std bottles 5oz → ~2.7vol · keg 30psi@38°F 10d, vent to serve</pre>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Second Summer — two brews, five beers. Checkboxes reset on reload by design. All checkpoints: two matching gravity readings, two days apart.
+</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+
+  function setPressed(selector, attr, value){
+    document.querySelectorAll(selector).forEach(function(btn){
+      btn.setAttribute("aria-pressed", String(btn.getAttribute(attr) === value));
+    });
+  }
+
+  document.querySelectorAll("[data-brew-btn]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      root.dataset.brew = btn.getAttribute("data-brew-btn");
+      setPressed("[data-brew-btn]", "data-brew-btn", root.dataset.brew);
+    });
+  });
+
+  document.querySelectorAll("[data-path-btn]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      root.dataset.path = btn.getAttribute("data-path-btn");
+      root.dataset.brew = "red";
+      setPressed("[data-brew-btn]", "data-brew-btn", "red");
+      setPressed("[data-path-btn]", "data-path-btn", root.dataset.path);
+    });
+  });
+
+  document.querySelectorAll(".check").forEach(function(box){
+    box.addEventListener("click", function(){
+      var done = box.getAttribute("aria-checked") === "true";
+      box.setAttribute("aria-checked", String(!done));
+      box.closest(".step").classList.toggle("done", !done);
+    });
+  });
+})();
+</script>
+</body>
+</html>
