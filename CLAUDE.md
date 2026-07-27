@@ -130,6 +130,32 @@ days 3–10 → FG check days 10 & 14.
 70–75°F. Standard bottles: 5 oz → ~2.7 volumes. Keg: ~30 psi @ 38°F for 10 days, vent to serving
 pressure. **Hard rule: never 3.2 volumes in standard longnecks.**
 
+**Style & technique notes (incorporated 2026-07-27).** Sources: BYO "Belgian Blond: Style
+Profile" by Jamil Zainasheff (https://byo.com/articles/belgian-blond-style-profile/) and the Mean
+Brews video above. These enrich the page; they do not change the recipe numbers.
+
+- Character (BJCP 25A): moderate-strength golden ale — subtle fruity-spicy Belgian yeast
+  complexity over grainy, slightly sweet Pilsner malt; may show light upfront sweetness but always
+  finishes dry and balanced. High carbonation + medium body → slightly creamy mouthfeel. Esters:
+  lemon, orange, grapefruit, pear; light pepper/clove phenols. All of it from malt and
+  fermentation — never added fruit or spice.
+- Style guardrails: no caramel/crystal malt (caramel flavor is out of style; winning recipes
+  trend toward toasted malts like aromatic instead). Hops noble and restrained. BU:GU ratio
+  0.25–0.5, sweet spot ~0.3–0.4; this recipe lands at ~0.43 (26 ÷ 60).
+- Award data (Mean Brews, n=25: 2 best-of-show, 11 gold, 4 silver, 5 bronze, 3 other): OG avg
+  1.064 and trending down (this recipe: 1.060); IBU 18–34, avg 26; SRM avg 5.3; Pilsner in 100%
+  of recipes (avg ~75% of grist); wheat malt in half (avg 10%); aromatic the top toasted malt and
+  rising; cane sugar in 42% (avg 6.5%); Chimay strain most used and gaining vs. the Duvel strain;
+  avg mash pH 5.37; avg carbonation 3.2 volumes.
+- Water/mash targets: mash pH ~5.4, calcium ~50 ppm, balanced sulfate/chloride.
+- Long boil rationale: drives off DMS precursors (SMM) from lightly kilned Pilsner malt.
+- Pitch rate: this style is pitch-sensitive — err low, never high. Jamil targets 0.75M
+  cells/mL/°P; Mean Brews goes as light as a 1 L starter. Chimay-strain recipes start mid-low
+  60s °F (Duvel-strain recipes start low 70s) — matches the 65°F pitch + free rise to 73°F.
+- Dry-finish rescue (Jamil): if the beer won't attenuate, add the cane sugar to the fermenter
+  once primary slows instead of the boil — yeast "finish dinner before dessert." The
+  never-in-the-mash rule still stands.
+
 ### Calendars
 
 - **Red:** brew Aug 1 → dry hop Aug 5 → FG stable Aug 11–13 → fruit Aug 14 → package Aug 18–24 →
@@ -153,7 +179,8 @@ pressure. **Hard rule: never 3.2 volumes in standard longnecks.**
   blackberry `#9A6BB4`, blonde `#D9A63C`. The accent and the CSS pint-glass gradient
   (`--beer-top` / `--beer-bottom`) both shift with state.
 - **Structure, top to bottom:** sticky topbar (brew switcher; fruit chips are `.red-only`) → hero
-  (CSS pint glass + six-cell vitals grid per brew) → fork ratings cards with pick buttons (red) →
+  (CSS pint glass + six-cell vitals grid per brew) → style profile (`.blonde-only`, from the
+  Style & technique notes above) → fork ratings cards with pick buttons (red) →
   shopping lists → brew-day checklist → fermentation checklist → fork panels (red) → packaging +
   calendar → mono quick-reference block per brew.
 - **Steps** are list items with large custom checkboxes (DOM state only — resets on reload, by
