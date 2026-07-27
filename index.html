@@ -255,6 +255,53 @@
     border-top:1px solid var(--hairline);
     font-size:.78rem; color:var(--secondary);
   }
+
+  /* ---------- my brews ---------- */
+  .hero-actions{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  .hero-actions button{
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:.8rem;
+    background:none; border:1px solid var(--hairline); border-radius:999px;
+    color:var(--text); padding:7px 15px; cursor:pointer;
+    transition:background .2s, border-color .2s, color .2s;
+  }
+  #fav-toggle[aria-pressed="true"]{ background:var(--accent); border-color:var(--accent); color:#1C1113; }
+  .shelf-group{ margin:14px 0; }
+  .shelf-group h3{ margin:12px 0 4px; }
+  .shelf-empty{ color:var(--secondary); font-size:.85rem; }
+  .fav-chips{ display:flex; gap:6px; flex-wrap:wrap; }
+  .fav-chip{
+    font-family:"Instrument Sans", sans-serif; font-weight:600; font-size:.78rem;
+    background:none; border:1px solid var(--accent); border-radius:999px;
+    color:var(--accent); padding:5px 12px; cursor:pointer;
+  }
+  .batch-card{
+    background:var(--panel); border:1px solid var(--hairline); border-radius:12px;
+    padding:4px 14px 12px; margin:10px 0;
+  }
+  .batch-card summary{
+    cursor:pointer; padding:10px 0;
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:.92rem;
+    list-style-position:inside;
+  }
+  .batch-card summary .status-tag{
+    font-family:"Spline Sans Mono", monospace; font-size:.62rem; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--secondary); margin-left:8px;
+  }
+  .batch-ing input, .batch-card textarea{
+    width:100%; box-sizing:border-box;
+    background:rgba(243,233,219,.06); border:1px solid var(--hairline); border-radius:6px;
+    color:var(--text); font-family:"Spline Sans Mono", monospace; font-size:.75rem;
+    padding:6px 8px; margin:3px 0;
+  }
+  .batch-card textarea{ font-family:"Instrument Sans", sans-serif; font-size:.85rem; min-height:96px; resize:vertical; }
+  .batch-actions{ display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+  .batch-actions button{
+    font-family:"Bricolage Grotesque", sans-serif; font-weight:700; font-size:.75rem;
+    background:none; border:1px solid var(--hairline); border-radius:999px;
+    color:var(--text); padding:6px 13px; cursor:pointer;
+  }
+  .batch-actions button.primary{ border-color:var(--accent); color:var(--accent); }
+  .batch-saved-note{ font-family:"Spline Sans Mono", monospace; font-size:.68rem; color:var(--secondary); margin-left:4px; align-self:center; }
 </style>
 </head>
 <body>
@@ -281,6 +328,24 @@
 
 <main>
 
+<!-- ================= MY BREWS SHELF ================= -->
+<section id="my-brews" hidden>
+  <p class="kicker" style="margin-top:24px">My Brews</p>
+  <h2 style="margin-top:0">My brews</h2>
+  <div class="shelf-group" id="shelf-favorites-group" hidden>
+    <h3>Favorites</h3>
+    <div class="fav-chips" id="shelf-favorites"></div>
+  </div>
+  <div class="shelf-group" id="shelf-brewday-group" hidden>
+    <h3>Brew day</h3>
+    <div id="shelf-brewday"></div>
+  </div>
+  <div class="shelf-group" id="shelf-brewed-group" hidden>
+    <h3>Brewed</h3>
+    <div id="shelf-brewed"></div>
+  </div>
+</section>
+
 <!-- ================= HERO ================= -->
 <section class="hero" id="hero">
   <div class="glass" aria-hidden="true">
@@ -300,6 +365,10 @@
     <p class="vit-only">A wit crossed with a schwarzbier — Sterling hops, Oro Blanco zest. Crossing the streams, on purpose.</p>
     <p class="radish-only">Weeping Radish Farm Brewery clone — clean lager feel, mild bitterness, complementary roast.</p>
     <p class="schwarz-only">Dave Helt's Best-of-Show winner — ale-fermented, lagered four patient months.</p>
+    <div class="hero-actions">
+      <button type="button" id="fav-toggle" aria-pressed="false">☆ Favorite</button>
+      <button type="button" id="start-brewday">Start Brew Day</button>
+    </div>
   </div>
 </section>
 
@@ -1040,6 +1109,179 @@
       box.closest(".step").classList.toggle("done", !done);
     });
   });
+
+  /* ---------- My Brews (localStorage: secondSummer.v1 — owner decision 2026-07-27) ---------- */
+  var BREW_NAMES = { red:"Red IPA", blonde:"Belgian Blonde", vit:"Venkman's Vit", radish:"Black Radish", schwarz:"Schwarzbier" };
+  var STORE_KEY = "secondSummer.v1";
+
+  function loadState(){
+    try{
+      var s = JSON.parse(localStorage.getItem(STORE_KEY));
+      if (s && Array.isArray(s.favorites) && Array.isArray(s.batches)) return s;
+    }catch(e){}
+    return { favorites:[], batches:[] };
+  }
+  function saveState(s){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(s)); }catch(e){} }
+  var state = loadState();
+
+  function todayISO(){
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+
+  function snapshotIngredients(brew){
+    var sec = document.getElementById("shopping-" + brew);
+    var items = [];
+    if (!sec) return items;
+    sec.querySelectorAll("tbody tr").forEach(function(tr){
+      var tds = tr.querySelectorAll("td");
+      items.push(tds[0].textContent.trim() + " — " + tds[1].textContent.trim());
+    });
+    sec.querySelectorAll(".plain-list li").forEach(function(li){
+      items.push(li.textContent.trim().replace(/\s+/g," "));
+    });
+    return items;
+  }
+
+  var favToggle = document.getElementById("fav-toggle");
+  function syncFavBtn(){
+    var fav = state.favorites.indexOf(root.dataset.brew) !== -1;
+    favToggle.setAttribute("aria-pressed", String(fav));
+    favToggle.textContent = (fav ? "★ Favorited" : "☆ Favorite");
+  }
+  favToggle.addEventListener("click", function(){
+    var b = root.dataset.brew;
+    var i = state.favorites.indexOf(b);
+    if (i === -1) state.favorites.push(b); else state.favorites.splice(i, 1);
+    saveState(state); syncFavBtn(); renderShelf();
+  });
+  document.querySelectorAll("[data-brew-btn], [data-path-btn]").forEach(function(btn){
+    btn.addEventListener("click", syncFavBtn);
+  });
+
+  document.getElementById("start-brewday").addEventListener("click", function(){
+    var b = root.dataset.brew;
+    state.batches.push({
+      id: "b" + Date.now(),
+      brew: b,
+      label: BREW_NAMES[b] + " — " + todayISO(),
+      date: todayISO(),
+      status: "brewday",
+      ingredients: snapshotIngredients(b),
+      notes: ""
+    });
+    saveState(state); renderShelf();
+    document.getElementById("my-brews").scrollIntoView({ block:"start" });
+  });
+
+  function batchCard(batch, open){
+    var d = document.createElement("details");
+    d.className = "batch-card";
+    d.dataset.id = batch.id;
+    if (open) d.open = true;
+    var sum = document.createElement("summary");
+    sum.textContent = batch.label;
+    var tag = document.createElement("span");
+    tag.className = "status-tag";
+    tag.textContent = batch.status === "brewday" ? "brew day" : "brewed";
+    sum.appendChild(tag);
+    d.appendChild(sum);
+
+    if (batch.status === "brewday"){
+      var ing = document.createElement("div");
+      ing.className = "batch-ing";
+      batch.ingredients.forEach(function(line){
+        var inp = document.createElement("input");
+        inp.type = "text"; inp.value = line;
+        ing.appendChild(inp);
+      });
+      d.appendChild(ing);
+      var acts = document.createElement("div");
+      acts.className = "batch-actions";
+      acts.innerHTML =
+        '<button type="button" class="primary" data-act="save">Save changes</button>' +
+        '<button type="button" data-act="brewed">Mark brewed</button>' +
+        '<button type="button" data-act="delete">Delete</button>' +
+        '<span class="batch-saved-note" hidden>saved ✓</span>';
+      d.appendChild(acts);
+    } else {
+      var ta = document.createElement("textarea");
+      ta.placeholder = "BJCP award notes — competition, score, medal, judge feedback…";
+      ta.value = batch.notes || "";
+      d.appendChild(ta);
+      var acts2 = document.createElement("div");
+      acts2.className = "batch-actions";
+      acts2.innerHTML =
+        '<button type="button" class="primary" data-act="save-notes">Save notes</button>' +
+        '<button type="button" data-act="delete">Delete</button>' +
+        '<span class="batch-saved-note" hidden>saved ✓</span>';
+      d.appendChild(acts2);
+    }
+    return d;
+  }
+
+  function renderShelf(){
+    var shelf = document.getElementById("my-brews");
+    var favGroup = document.getElementById("shelf-favorites-group");
+    var favBox = document.getElementById("shelf-favorites");
+    var bdGroup = document.getElementById("shelf-brewday-group");
+    var bdBox = document.getElementById("shelf-brewday");
+    var brGroup = document.getElementById("shelf-brewed-group");
+    var brBox = document.getElementById("shelf-brewed");
+
+    favBox.innerHTML = ""; bdBox.innerHTML = ""; brBox.innerHTML = "";
+
+    state.favorites.forEach(function(b){
+      var chip = document.createElement("button");
+      chip.type = "button"; chip.className = "fav-chip";
+      chip.textContent = "★ " + BREW_NAMES[b];
+      chip.addEventListener("click", function(){
+        root.dataset.brew = b;
+        setPressed("[data-brew-btn]", "data-brew-btn", b);
+        syncFavBtn();
+      });
+      favBox.appendChild(chip);
+    });
+    var brewday = state.batches.filter(function(x){ return x.status === "brewday"; });
+    var brewed = state.batches.filter(function(x){ return x.status === "brewed"; });
+    brewday.forEach(function(x){ bdBox.appendChild(batchCard(x)); });
+    brewed.forEach(function(x){ brBox.appendChild(batchCard(x)); });
+
+    favGroup.hidden = state.favorites.length === 0;
+    bdGroup.hidden = brewday.length === 0;
+    brGroup.hidden = brewed.length === 0;
+    shelf.hidden = favGroup.hidden && bdGroup.hidden && brGroup.hidden;
+  }
+
+  document.getElementById("my-brews").addEventListener("click", function(ev){
+    var btn = ev.target.closest("button[data-act]");
+    if (!btn) return;
+    var card = btn.closest(".batch-card");
+    var batch = state.batches.find(function(x){ return x.id === card.dataset.id; });
+    if (!batch) return;
+    var act = btn.getAttribute("data-act");
+    if (act === "save"){
+      batch.ingredients = Array.prototype.map.call(card.querySelectorAll(".batch-ing input"), function(i){ return i.value; });
+      saveState(state);
+      var n = card.querySelector(".batch-saved-note"); n.hidden = false;
+      setTimeout(function(){ n.hidden = true; }, 1500);
+    } else if (act === "save-notes"){
+      batch.notes = card.querySelector("textarea").value;
+      saveState(state);
+      var n2 = card.querySelector(".batch-saved-note"); n2.hidden = false;
+      setTimeout(function(){ n2.hidden = true; }, 1500);
+    } else if (act === "brewed"){
+      batch.ingredients = Array.prototype.map.call(card.querySelectorAll(".batch-ing input"), function(i){ return i.value; });
+      batch.status = "brewed";
+      saveState(state); renderShelf();
+    } else if (act === "delete"){
+      state.batches = state.batches.filter(function(x){ return x.id !== batch.id; });
+      saveState(state); renderShelf();
+    }
+  });
+
+  syncFavBtn();
+  renderShelf();
 })();
 </script>
 </body>

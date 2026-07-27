@@ -48,7 +48,10 @@ Only if the HTML is missing or I explicitly ask for a rebuild. Build one self-co
   web page. Recovery for everything else is `git revert`; worst-case blast radius is this one
   public repo, rebuilt from this document in under an hour.
 - Numbers on the page drift from **Canonical Recipe Data** below.
-- Dependencies beyond Google Fonts. No build step, no frameworks, no localStorage.
+- Dependencies beyond Google Fonts. No build step, no frameworks. localStorage is permitted
+  **only** for user brew data under the single key `secondSummer.v1` (owner decision 2026-07-27,
+  for the My Brews feature); no other client storage, no cookies, and the page must work normally
+  when storage is empty or unavailable.
 
 ---
 
@@ -294,10 +297,31 @@ batch. Ferment 66–68°F. FG gate ~1.020 — a full finish is this winner's cha
 - [ ] Safety copy present: page contains both "not rated" and "3.2" in the blonde packaging section.
 - [ ] No fruit step renders ahead of its FG-stable checkpoint.
 - [ ] Renders at 380 px with no horizontal scroll.
+- [ ] My Brews: favorite survives reload; Start Brew Day creates a dated editable copy whose
+      saved edits survive reload; Mark brewed exposes BJCP notes that survive reload; page loads
+      cleanly with localStorage empty.
 - [ ] Pages URL returns 200 and serves the latest commit.
+
+## My Brews (added 2026-07-27 at owner request)
+
+Collections shelf at the top of `<main>`, hidden when empty. State persists in localStorage key
+`secondSummer.v1`: `{ favorites: [brewKey], batches: [{id, brew, label, date, status:
+"brewday"|"brewed", ingredients: [string], notes}] }`.
+
+- **Favorite:** ☆ toggle in the hero for the current brew; favorites render as accent chips in
+  the shelf that jump to their brew.
+- **Brew Day:** "Start Brew Day" in the hero snapshots the current brew's shopping list (grain
+  table rows + sundries) into an editable batch card, labeled `"{Brew} — {YYYY-MM-DD}"` (the
+  day's date after the starting recipe). Ingredient lines are editable inputs; "Save changes"
+  persists them. The canonical recipe sections themselves are never edited — batches are copies,
+  so the page always matches Canonical Recipe Data.
+- **Brewed:** "Mark brewed" moves a batch to the Brewed group and reveals a BJCP award-notes
+  textarea (score, medal, judge feedback) with its own save.
+- Step checkboxes remain DOM-only (reset on reload) — unchanged.
 
 ## Parking lot — do not build without asking
 
 - Print stylesheet for a garage clipboard copy.
-- Per-step brew-log notes (needs a storage decision first).
-- Pseudo-Festbier as brew #3.
+- Per-step brew-log notes (storage decision made 2026-07-27 — localStorage — but the per-step
+  feature itself still needs an owner ask; batch-level notes live in My Brews).
+- Pseudo-Festbier as a future brew.
